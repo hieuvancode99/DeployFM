@@ -39,6 +39,7 @@ export default function BudgetsPage() {
 
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [amountDisplay, setAmountDisplay] = useState('');
 
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<BudgetFormValues>({
     resolver: zodResolver(budgetSchema),
@@ -97,6 +98,7 @@ export default function BudgetsPage() {
           month: selectedMonth,
           year: selectedYear
         });
+        setAmountDisplay('');
         fetchBudgetsStatus();
       } else {
         setMessage({ text: res.data.message || 'Lỗi khi đặt ngân sách.', type: 'error' });
@@ -112,19 +114,31 @@ export default function BudgetsPage() {
     }
   };
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/\D/g, '');
+    if (!rawValue) {
+      setAmountDisplay('');
+      setValue('amountLimit', 0 as any, { shouldValidate: true });
+      return;
+    }
+    const numericValue = parseInt(rawValue, 10);
+    setAmountDisplay(numericValue.toLocaleString('vi-VN'));
+    setValue('amountLimit', numericValue, { shouldValidate: true });
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white">Quản lý ngân sách</h1>
-        <p className="text-slate-400 mt-1">Đặt hạn mức chi tiêu hàng tháng cho từng danh mục để tránh vung tay quá trán.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Quản lý ngân sách</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1">Đặt hạn mức chi tiêu hàng tháng cho từng danh mục để tránh vung tay quá trán.</p>
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         {/* Left: Setup Budget Form */}
-        <div className="lg:col-span-1 rounded-2xl border border-slate-800 bg-slate-900/50 p-6 shadow-xl backdrop-blur-md self-start">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <PiggyBank className="h-5 w-5 text-indigo-400" />
+        <div className="lg:col-span-1 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/50 p-6 shadow-xl backdrop-blur-md self-start">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+            <PiggyBank className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
             Thiết lập hạn mức
           </h2>
 
@@ -142,10 +156,10 @@ export default function BudgetsPage() {
 
             {/* Category */}
             <div className="space-y-1">
-              <label htmlFor="categoryId" className="block text-xs font-semibold text-slate-400">Danh mục chi tiêu</label>
+              <label htmlFor="categoryId" className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Danh mục chi tiêu</label>
               <select
                 id="categoryId"
-                className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-3 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950/60 py-3 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none"
                 {...register('categoryId')}
               >
                 <option value="">-- Chọn danh mục --</option>
@@ -158,17 +172,18 @@ export default function BudgetsPage() {
 
             {/* Amount Limit */}
             <div className="space-y-1">
-              <label htmlFor="amountLimit" className="block text-xs font-semibold text-slate-400">Hạn mức tối đa (VND)</label>
+              <label htmlFor="amountLimit" className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Hạn mức tối đa (VND)</label>
               <div className="relative">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                   <DollarSign className="h-4 w-4 text-slate-500" />
                 </div>
                 <input
                   id="amountLimit"
-                  type="number"
-                  placeholder="Ví dụ: 3000000"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-3 pl-9 pr-3 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
-                  {...register('amountLimit')}
+                  type="text"
+                  placeholder="Ví dụ: 3.000.000"
+                  value={amountDisplay}
+                  onChange={handleAmountChange}
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950/60 py-3 pl-9 pr-3 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
                 />
               </div>
               {errors.amountLimit && <p className="text-xs text-red-400">{errors.amountLimit.message}</p>}
@@ -177,10 +192,10 @@ export default function BudgetsPage() {
             {/* Month & Year Selection */}
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <label htmlFor="month" className="block text-xs font-semibold text-slate-400">Tháng</label>
+                <label htmlFor="month" className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Tháng</label>
                 <select
                   id="month"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-2.5 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950/60 py-2.5 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none"
                   {...register('month')}
                 >
                   {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
@@ -190,10 +205,10 @@ export default function BudgetsPage() {
               </div>
 
               <div className="space-y-1">
-                <label htmlFor="year" className="block text-xs font-semibold text-slate-400">Năm</label>
+                <label htmlFor="year" className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Năm</label>
                 <select
                   id="year"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-2.5 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950/60 py-2.5 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none"
                   {...register('year')}
                 >
                   <option value={currentYear}>{currentYear}</option>
@@ -216,9 +231,9 @@ export default function BudgetsPage() {
         {/* Right: Budgets Progress comparison */}
         <div className="lg:col-span-2 space-y-6">
           {/* Month/Year selector header */}
-          <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-800 bg-slate-900/30 backdrop-blur-md">
-            <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-indigo-400" />
+          <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/30 backdrop-blur-md">
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
               Thống kê ngân sách thời gian:
             </h3>
             
@@ -226,7 +241,7 @@ export default function BudgetsPage() {
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                className="rounded-xl border border-slate-800 bg-slate-950 py-1.5 px-3 text-xs font-semibold text-slate-300 focus:border-indigo-500 focus:outline-none"
+                className="rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 py-1.5 px-3 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:border-indigo-500 focus:outline-none"
               >
                 {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
                   <option key={m} value={m}>Tháng {m}</option>
@@ -236,7 +251,7 @@ export default function BudgetsPage() {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                className="rounded-xl border border-slate-800 bg-slate-950 py-1.5 px-3 text-xs font-semibold text-slate-300 focus:border-indigo-500 focus:outline-none"
+                className="rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950 py-1.5 px-3 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:border-indigo-500 focus:outline-none"
               >
                 <option value={currentYear}>{currentYear}</option>
                 <option value={currentYear + 1}>{currentYear + 1}</option>
@@ -245,8 +260,8 @@ export default function BudgetsPage() {
           </div>
 
           {/* Progress List */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 shadow-xl backdrop-blur-md space-y-6">
-            <h2 className="text-lg font-semibold text-white">So sánh Chi tiêu & Hạn mức</h2>
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/50 p-6 shadow-xl backdrop-blur-md space-y-6">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">So sánh Chi tiêu & Hạn mức</h2>
 
             {loading ? (
               <div className="py-12 text-center">
@@ -267,12 +282,12 @@ export default function BudgetsPage() {
                   }
 
                   return (
-                    <div key={budget._id} className="space-y-2 p-4 rounded-xl bg-slate-950/40 border border-slate-800/40">
+                    <div key={budget._id} className="space-y-2 p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800/40">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="text-sm font-semibold text-white">{budget.category?.name}</h4>
-                          <p className="text-xs text-slate-400 mt-0.5">
-                            Đã tiêu: <span className="font-semibold text-slate-300">{budget.spent.toLocaleString('vi-VN')} đ</span> / Hạn mức: {budget.amountLimit.toLocaleString('vi-VN')} đ
+                          <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{budget.category?.name}</h4>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                            Đã tiêu: <span className="font-semibold text-slate-700 dark:text-slate-300">{budget.spent.toLocaleString('vi-VN')} đ</span> / Hạn mức: {budget.amountLimit.toLocaleString('vi-VN')} đ
                           </p>
                         </div>
                         <span className={`text-xs font-bold rounded-lg px-2 py-1 ${bgBadge}`}>
@@ -281,7 +296,7 @@ export default function BudgetsPage() {
                       </div>
                       
                       {/* Bar */}
-                      <div className="h-2.5 w-full rounded-full bg-slate-800 overflow-hidden">
+                      <div className="h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                         <div 
                           className={`h-full ${barColor} transition-all duration-300`} 
                           style={{ width: `${Math.min(budget.percentage, 100)}%` }}
@@ -300,7 +315,7 @@ export default function BudgetsPage() {
                 })}
               </div>
             ) : (
-              <div className="py-12 text-center text-slate-400 text-sm">
+              <div className="py-12 text-center text-slate-500 dark:text-slate-400 text-sm">
                 Không tìm thấy ngân sách nào được cài đặt cho khoảng thời gian này.
               </div>
             )}

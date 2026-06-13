@@ -99,6 +99,26 @@ export default function TransactionsPage() {
   });
 
   const selectedType = watch('type');
+  const amountValue = watch('amount');
+  const [amountDisplay, setAmountDisplay] = useState('');
+
+  useEffect(() => {
+    if (amountValue) {
+      setAmountDisplay(Number(amountValue).toLocaleString('vi-VN'));
+    } else {
+      setAmountDisplay('');
+    }
+  }, [amountValue]);
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/\D/g, '');
+    if (!rawValue) {
+      setValue('amount', 0 as any, { shouldValidate: true });
+      return;
+    }
+    const numericValue = parseInt(rawValue, 10);
+    setValue('amount', numericValue, { shouldValidate: true });
+  };
 
   // Load categories
   useEffect(() => {
@@ -244,8 +264,8 @@ export default function TransactionsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Quản lý giao dịch</h1>
-          <p className="text-slate-400 mt-1">Xem, thêm mới hoặc lọc toàn bộ lịch sử thu nhập và chi tiêu của bạn.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Quản lý giao dịch</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">Xem, thêm mới hoặc lọc toàn bộ lịch sử thu nhập và chi tiêu của bạn.</p>
         </div>
         <button
           onClick={openAddModal}
@@ -257,27 +277,27 @@ export default function TransactionsPage() {
       </div>
 
       {/* Filter and Actions Bar */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 p-5 rounded-2xl border border-slate-800 bg-slate-900/40 backdrop-blur-md">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/40 backdrop-blur-md transition-colors duration-300">
         {/* Search */}
         <div className="space-y-1">
-          <label className="text-xs font-semibold text-slate-400">Từ khóa tìm kiếm</label>
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-400">Từ khóa tìm kiếm</label>
           <input
             type="text"
             placeholder="Tìm theo mô tả..."
             value={filters.search || ''}
             onChange={(e) => setFilters({ search: e.target.value, page: 1 })}
-            className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-2.5 px-3 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-2.5 px-3 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
           />
         </div>
 
         {/* Type & Category */}
         <div className="space-y-1">
-          <label className="text-xs font-semibold text-slate-400">Loại & Danh mục</label>
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-400">Loại & Danh mục</label>
           <div className="flex gap-2">
             <select
               value={filters.type || ''}
               onChange={(e) => setFilters({ type: e.target.value, categoryId: '', page: 1 })}
-              className="w-1/2 rounded-xl border border-slate-800 bg-slate-950/60 py-2.5 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-1/2 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-2.5 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               <option value="">Tất cả loại</option>
               <option value="income">Thu nhập</option>
@@ -287,7 +307,7 @@ export default function TransactionsPage() {
             <select
               value={filters.categoryId || ''}
               onChange={(e) => setFilters({ categoryId: e.target.value, page: 1 })}
-              className="w-1/2 rounded-xl border border-slate-800 bg-slate-950/60 py-2.5 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-1/2 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-2.5 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               <option value="">Tất cả danh mục</option>
               {categories
@@ -301,38 +321,38 @@ export default function TransactionsPage() {
 
         {/* Date Filter */}
         <div className="space-y-1">
-          <label className="text-xs font-semibold text-slate-400">Lọc theo ngày</label>
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-400">Lọc theo ngày</label>
           <div className="flex items-center gap-2">
             <input
               type="date"
               value={filters.startDate || ''}
               onChange={(e) => setFilters({ startDate: e.target.value, page: 1 })}
-              className="w-1/2 rounded-xl border border-slate-800 bg-slate-950/60 py-2 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+              className="w-1/2 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-2 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none"
             />
             <span className="text-slate-500 text-xs">-</span>
             <input
               type="date"
               value={filters.endDate || ''}
               onChange={(e) => setFilters({ endDate: e.target.value, page: 1 })}
-              className="w-1/2 rounded-xl border border-slate-800 bg-slate-950/60 py-2 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+              className="w-1/2 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-2 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Export Reports */}
         <div className="space-y-1 flex flex-col justify-end">
-          <label className="text-xs font-semibold text-slate-400 mb-1">Xuất báo cáo</label>
+          <label className="text-xs font-semibold text-slate-700 dark:text-slate-400 mb-1">Xuất báo cáo</label>
           <div className="flex gap-2">
             <button
               onClick={() => handleExport('xlsx')}
-              className="flex w-1/2 items-center justify-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-900 py-2.5 text-xs font-semibold text-slate-300 transition-colors duration-200"
+              className="flex w-1/2 items-center justify-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 hover:bg-slate-200 dark:hover:bg-slate-900 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-200"
             >
               <Download className="h-4 w-4" />
               Excel
             </button>
             <button
               onClick={() => handleExport('pdf')}
-              className="flex w-1/2 items-center justify-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-900 py-2.5 text-xs font-semibold text-slate-300 transition-colors duration-200"
+              className="flex w-1/2 items-center justify-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 hover:bg-slate-200 dark:hover:bg-slate-900 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 transition-colors duration-200"
             >
               <Download className="h-4 w-4" />
               PDF
@@ -342,10 +362,10 @@ export default function TransactionsPage() {
       </div>
 
       {/* Transactions Table */}
-      <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/40 shadow-xl backdrop-blur-md">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 shadow-xl backdrop-blur-md">
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left text-sm text-slate-300">
-            <thead className="bg-slate-900/80 text-xs font-semibold text-slate-400 border-b border-slate-800">
+          <table className="w-full border-collapse text-left text-sm text-slate-700 dark:text-slate-300">
+            <thead className="bg-slate-50 dark:bg-slate-900/80 text-xs font-semibold text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
               <tr>
                 <th className="px-6 py-4">Ngày</th>
                 <th className="px-6 py-4">Danh mục</th>
@@ -355,7 +375,7 @@ export default function TransactionsPage() {
                 <th className="px-6 py-4 text-center">Thao tác</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
               {loading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center">
@@ -368,18 +388,18 @@ export default function TransactionsPage() {
                   const Icon = tx.categoryId && iconMap[tx.categoryId.icon] ? iconMap[tx.categoryId.icon] : Tag;
                   return (
                     <tr key={tx._id} className="hover:bg-slate-900/30 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-400">
+                      <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-600 dark:text-slate-400">
                         {new Date(tx.date).toLocaleDateString('vi-VN')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2.5">
                           <div 
-                            className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-800"
+                            className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800"
                             style={{ backgroundColor: `${tx.categoryId?.color || '#334155'}15` }}
                           >
                             <Icon className="h-4 w-4" style={{ color: tx.categoryId?.color || '#94A3B8' }} />
                           </div>
-                          <span className="font-medium text-white">{tx.categoryId?.name || 'Khác'}</span>
+                          <span className="font-medium text-slate-900 dark:text-white">{tx.categoryId?.name || 'Khác'}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -392,11 +412,11 @@ export default function TransactionsPage() {
                           {tx.type === 'income' ? 'Thu nhập' : 'Chi tiêu'}
                         </span>
                       </td>
-                      <td className="px-6 py-4 max-w-xs truncate text-slate-400">
+                      <td className="px-6 py-4 max-w-xs truncate text-slate-600 dark:text-slate-400">
                         {tx.description || '-'}
                       </td>
                       <td className={`px-6 py-4 whitespace-nowrap text-right font-bold ${
-                        tx.type === 'income' ? 'text-emerald-400' : 'text-slate-100'
+                        tx.type === 'income' ? 'text-emerald-500 dark:text-emerald-400' : 'text-slate-900 dark:text-slate-100'
                       }`}>
                         {tx.type === 'income' ? '+' : '-'}
                         {tx.amount.toLocaleString('vi-VN')} đ
@@ -405,13 +425,13 @@ export default function TransactionsPage() {
                         <div className="flex items-center justify-center gap-2.5">
                           <button
                             onClick={() => openEditModal(tx)}
-                            className="p-1.5 text-slate-400 hover:text-indigo-400 rounded-lg hover:bg-slate-800"
+                            className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <Edit3 className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(tx._id)}
-                            className="p-1.5 text-slate-400 hover:text-rose-400 rounded-lg hover:bg-slate-800"
+                            className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
@@ -433,22 +453,22 @@ export default function TransactionsPage() {
 
         {/* Pagination Bar */}
         {pagination.pages > 1 && (
-          <div className="flex items-center justify-between border-t border-slate-800 px-6 py-4 bg-slate-900/30">
-            <span className="text-xs text-slate-400">
+          <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 px-6 py-4 bg-slate-50 dark:bg-slate-900/30">
+            <span className="text-xs text-slate-600 dark:text-slate-400">
               Trang {pagination.page} / {pagination.pages} (Tổng {pagination.total} giao dịch)
             </span>
             <div className="flex gap-2">
               <button
                 disabled={pagination.page <= 1}
                 onClick={() => setFilters({ page: pagination.page - 1 })}
-                className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950/40 hover:bg-slate-900 px-3 py-1.5 text-xs text-slate-300 disabled:opacity-30 disabled:hover:bg-slate-950/40"
+                className="flex items-center gap-1 rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950/40 hover:bg-slate-100 dark:hover:bg-slate-900 px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-slate-950/40"
               >
                 <ChevronLeft className="h-4 w-4" /> Trước
               </button>
               <button
                 disabled={pagination.page >= pagination.pages}
                 onClick={() => setFilters({ page: pagination.page + 1 })}
-                className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950/40 hover:bg-slate-900 px-3 py-1.5 text-xs text-slate-300 disabled:opacity-30 disabled:hover:bg-slate-950/40"
+                className="flex items-center gap-1 rounded-lg border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-950/40 hover:bg-slate-100 dark:hover:bg-slate-900 px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 disabled:opacity-30 disabled:hover:bg-white dark:disabled:hover:bg-slate-950/40"
               >
                 Sau <ChevronRight className="h-4 w-4" />
               </button>
@@ -459,24 +479,24 @@ export default function TransactionsPage() {
 
       {/* Add / Edit Transaction Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl animate-scale-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-slate-950/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl animate-scale-in">
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-100"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-100"
             >
               <X className="h-5 w-5" />
             </button>
 
-            <h2 className="text-xl font-bold text-white mb-6">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6">
               {editingTx ? 'Sửa thông tin giao dịch' : 'Thêm giao dịch mới'}
             </h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {/* Type Switcher */}
               <div className="space-y-1">
-                <label className="block text-xs font-semibold text-slate-400">Loại giao dịch</label>
-                <div className="flex gap-2 p-1 bg-slate-950 rounded-xl border border-slate-800">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Loại giao dịch</label>
+                <div className="flex gap-2 p-1 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={() => {
@@ -485,8 +505,8 @@ export default function TransactionsPage() {
                     }}
                     className={`w-1/2 py-2 text-xs font-bold rounded-lg transition-all ${
                       selectedType === 'expense' 
-                        ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' 
-                        : 'text-slate-400 hover:text-slate-200'
+                        ? 'bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20' 
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                   >
                     Chi tiêu
@@ -499,8 +519,8 @@ export default function TransactionsPage() {
                     }}
                     className={`w-1/2 py-2 text-xs font-bold rounded-lg transition-all ${
                       selectedType === 'income' 
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                        : 'text-slate-400 hover:text-slate-200'
+                        ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20' 
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                   >
                     Thu nhập
@@ -509,24 +529,49 @@ export default function TransactionsPage() {
               </div>
 
               {/* Amount */}
-              <div className="space-y-1">
-                <label htmlFor="amount" className="block text-xs font-semibold text-slate-400">Số tiền (VND)</label>
+              <div className="space-y-2">
+                <label htmlFor="amount" className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Số tiền (VND)</label>
                 <input
                   id="amount"
-                  type="number"
-                  placeholder="Nhập số tiền..."
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-3 px-3 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
-                  {...register('amount')}
+                  type="text"
+                  placeholder="Ví dụ: 50.000"
+                  value={amountDisplay}
+                  onChange={handleAmountChange}
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-3 px-3 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
                 />
-                {errors.amount && <p className="text-xs text-red-400">{errors.amount.message}</p>}
+                
+                {/* Quick Amount Suggestion Buttons */}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {[20000, 50000, 100000, 500000, 1000000, 2000000].map(amt => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => {
+                        const current = Number(watch('amount')) || 0;
+                        setValue('amount', current + amt, { shouldValidate: true });
+                      }}
+                      className="px-2.5 py-1 text-xs font-medium rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors"
+                    >
+                      +{amt >= 1000000 ? `${amt/1000000}M` : `${amt/1000}K`}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setValue('amount', 0 as any)}
+                    className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                  >
+                    Xóa
+                  </button>
+                </div>
+                {errors.amount && <p className="text-xs text-red-500 dark:text-red-400">{errors.amount.message as string}</p>}
               </div>
 
               {/* Category */}
               <div className="space-y-1">
-                <label htmlFor="categoryId" className="block text-xs font-semibold text-slate-400">Danh mục</label>
+                <label htmlFor="categoryId" className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Danh mục</label>
                 <select
                   id="categoryId"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-3 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-3 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none"
                   {...register('categoryId')}
                 >
                   <option value="">-- Chọn danh mục --</option>
@@ -534,41 +579,41 @@ export default function TransactionsPage() {
                     <option key={cat._id} value={cat._id}>{cat.name}</option>
                   ))}
                 </select>
-                {errors.categoryId && <p className="text-xs text-red-400">{errors.categoryId.message}</p>}
+                {errors.categoryId && <p className="text-xs text-red-500 dark:text-red-400">{errors.categoryId.message as string}</p>}
               </div>
 
               {/* Date */}
               <div className="space-y-1">
-                <label htmlFor="date" className="block text-xs font-semibold text-slate-400">Ngày giao dịch</label>
+                <label htmlFor="date" className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Ngày giao dịch</label>
                 <div className="relative">
                   <input
                     id="date"
                     type="date"
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-3 px-3 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-3 px-3 text-sm text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:outline-none"
                     {...register('date')}
                   />
                 </div>
-                {errors.date && <p className="text-xs text-red-400">{errors.date.message}</p>}
+                {errors.date && <p className="text-xs text-red-500 dark:text-red-400">{errors.date.message as string}</p>}
               </div>
 
               {/* Description */}
               <div className="space-y-1">
-                <label htmlFor="description" className="block text-xs font-semibold text-slate-400">Mô tả chi tiết</label>
+                <label htmlFor="description" className="block text-xs font-semibold text-slate-700 dark:text-slate-400">Mô tả chi tiết</label>
                 <textarea
                   id="description"
                   rows={3}
                   placeholder="Ví dụ: Ăn tối cùng bạn bè..."
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-3 px-3 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 py-3 px-3 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
                   {...register('description')}
                 />
               </div>
 
               {/* Submit Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-slate-800 mt-6">
+              <div className="flex gap-3 pt-4 border-t border-slate-200 dark:border-slate-800 mt-6">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="w-1/2 py-3 rounded-xl border border-slate-800 hover:bg-slate-800 text-sm font-semibold text-slate-300 transition-colors"
+                  className="w-1/2 py-3 rounded-xl border border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors"
                 >
                   Hủy bỏ
                 </button>

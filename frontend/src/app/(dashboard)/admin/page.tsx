@@ -123,15 +123,15 @@ export default function AdminPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white flex items-center gap-2.5">
-            <ShieldAlert className="h-8 w-8 text-indigo-500" />
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
+            <ShieldAlert className="h-8 w-8 text-indigo-600 dark:text-indigo-500" />
             Quản lý Tài khoản
           </h1>
-          <p className="text-slate-400 mt-1">Xem, cấm hoặc kích hoạt lại tài khoản người dùng trong hệ thống.</p>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">Xem, cấm hoặc kích hoạt lại tài khoản người dùng trong hệ thống.</p>
         </div>
         <button
           onClick={fetchUsers}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-slate-100 text-sm transition-all"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 text-sm transition-all"
         >
           <RefreshCw className="h-4 w-4" />
           Làm mới
@@ -140,34 +140,34 @@ export default function AdminPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5 text-center">
-          <p className="text-3xl font-bold text-white">{totalUsers}</p>
-          <p className="text-xs text-slate-400 mt-1">Tổng tài khoản</p>
+        <div className="rounded-2xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-5 text-center">
+          <p className="text-3xl font-bold text-slate-900 dark:text-white">{totalUsers}</p>
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Tổng tài khoản</p>
         </div>
-        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-5 text-center">
-          <p className="text-3xl font-bold text-emerald-400">{activeUsers}</p>
-          <p className="text-xs text-slate-400 mt-1">Đang hoạt động</p>
+        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/5 p-5 text-center">
+          <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{activeUsers}</p>
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Đang hoạt động</p>
         </div>
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-5 text-center">
-          <p className="text-3xl font-bold text-red-400">{bannedUsers}</p>
-          <p className="text-xs text-slate-400 mt-1">Đã bị cấm</p>
+        <div className="rounded-2xl border border-red-500/20 bg-red-50 dark:bg-red-500/5 p-5 text-center">
+          <p className="text-3xl font-bold text-red-600 dark:text-red-400">{bannedUsers}</p>
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Đã bị cấm</p>
         </div>
       </div>
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
         <input
           type="text"
           placeholder="Tìm kiếm theo tên hoặc email..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="w-full rounded-xl border border-slate-800 bg-slate-900/50 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+          className="w-full rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/50 py-3 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
         />
       </div>
 
       {/* User Table */}
-      <div className="rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden">
+      <div className="rounded-2xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900/50 overflow-hidden">
         {loading ? (
           <div className="py-16 text-center">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent" />
@@ -182,17 +182,17 @@ export default function AdminPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-900">
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-6 py-4">Người dùng</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-6 py-4">Vai trò</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-6 py-4">Ngày tạo</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-6 py-4">Trạng thái</th>
-                  <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-6 py-4">Hành động</th>
+                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
+                  <th className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">Người dùng</th>
+                  <th className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">Vai trò</th>
+                  <th className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">Ngày tạo</th>
+                  <th className="text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">Trạng thái</th>
+                  <th className="text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider px-6 py-4">Hành động</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/50">
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-800/50">
                 {filteredUsers.map(user => (
-                  <tr key={user._id} className="hover:bg-slate-900/40 transition-colors">
+                  <tr key={user._id} className="hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ${
@@ -201,27 +201,27 @@ export default function AdminPage() {
                           {user.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-white flex items-center gap-1.5">
+                          <p className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
                             {user.name}
                             {user._id === currentUserId && (
-                              <span className="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1.5 py-0.5 rounded font-medium">Bạn</span>
+                              <span className="text-[10px] bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 px-1.5 py-0.5 rounded font-medium">Bạn</span>
                             )}
                           </p>
-                          <p className="text-xs text-slate-400">{user.email}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md ${
                         user.role === 'Admin'
-                          ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                          : 'bg-slate-800 text-slate-300 border border-slate-700'
+                          ? 'bg-amber-100 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
                       }`}>
                         {user.role === 'Admin' ? <Crown className="h-3 w-3" /> : <UserIcon className="h-3 w-3" />}
                         {user.role === 'Admin' ? 'Quản trị viên' : 'Thành viên'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-400">
+                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
                       {new Date(user.createdAt).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                     </td>
                     <td className="px-6 py-4">
