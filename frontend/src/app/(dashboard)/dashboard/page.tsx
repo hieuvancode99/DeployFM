@@ -6,8 +6,9 @@ import DashboardClient from '@/components/DashboardClient';
 
 async function getDashboardData(token: string) {
   try {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
     // Fetch user transactions (up to 100 to get a solid list for calculations)
-    const txRes = await fetch('http://localhost:5000/api/transactions?limit=100', {
+    const txRes = await fetch(`${API_URL}/transactions?limit=100`, {
       headers: {
         Authorization: `Bearer ${token}`
       },
@@ -15,7 +16,7 @@ async function getDashboardData(token: string) {
     });
 
     // Fetch budget status
-    const budgetRes = await fetch('http://localhost:5000/api/budgets/status', {
+    const budgetRes = await fetch(`${API_URL}/budgets/status`, {
       headers: {
         Authorization: `Bearer ${token}`
       },
