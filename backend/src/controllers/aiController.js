@@ -56,7 +56,7 @@ Yêu cầu định dạng:
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
-      
+
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
@@ -169,8 +169,8 @@ Yêu cầu định dạng:
 
     if (!apiKey) {
       console.log('Gemini API key is not configured, returning mock response...');
-      return res.json({ 
-        success: true, 
+      return res.json({
+        success: true,
         data: `Xin lỗi, tôi hiện đang ở chế độ ngoại tuyến (Offline Mode) nên không thể trò chuyện trực tiếp lúc này. Để tôi hoạt động đầy đủ, vui lòng cấu hình \`GEMINI_API_KEY\`.`
       });
     }
@@ -178,7 +178,7 @@ Yêu cầu định dạng:
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
-      
+
       const formattedHistory = Array.isArray(history) ? history.map(msg => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }]
@@ -197,15 +197,15 @@ Yêu cầu định dạng:
       ];
 
       const chat = model.startChat({ history: historyWithContext });
-      
+
       const result = await chat.sendMessage(message);
       const text = result.response.text();
 
       res.json({ success: true, data: text });
     } catch (aiError) {
       console.error('Gemini API execution error:', aiError);
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         data: `Xin lỗi, có lỗi khi kết nối đến AI. Hãy thử lại sau ít phút.`
       });
     }
